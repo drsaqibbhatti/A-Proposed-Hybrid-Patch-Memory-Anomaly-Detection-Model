@@ -1,0 +1,35 @@
+# Default strong configuration for grayscale industrial anomaly detection.
+# Train only on normal images. Evaluate on normal + defect images when labels are available.
+model:
+  teacher_name: wide_resnet50_2
+  pretrained: true
+  teacher_ckpt: null
+  layers: [layer2, layer3]
+  target_dim: 256
+  local_agg_kernel: 3
+  enable_student: true
+  enable_autoencoder: true
+  student_width: 96
+  ae_width: 96
+  image_size: 256
+training:
+  epochs: 20
+  batch_size: 2
+  lr: 0.0001
+  weight_decay: 0.00001
+  hard_ratio: 0.10
+  student_weight: 1.0
+  autoencoder_weight: 0.5
+  consistency_weight: 0.05
+memory:
+  coreset_ratio: 0.05
+  coreset_method: greedy
+  max_train_patches: 200000
+  max_memory_patches: 20000
+calibration:
+  topk_ratio: 0.01
+  threshold_quantile: 0.995
+  weights:
+    patchcore: 0.60
+    student: 0.25
+    autoencoder: 0.15
